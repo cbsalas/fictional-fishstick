@@ -20,14 +20,22 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from . import views
 
+
+import os
+
 @api_view(['GET'])
 def api_root(request):
+    codespace_name = os.environ.get('CODESPACE_NAME', '')
+    if codespace_name:
+        base_url = f"https://{codespace_name}-8000.app.github.dev/api"
+    else:
+        base_url = "http://localhost:8000/api"
     return Response({
-        'users': '/users/',
-        'teams': '/teams/',
-        'activities': '/activities/',
-        'workouts': '/workouts/',
-        'leaderboard': '/leaderboard/',
+        'users': f'{base_url}/users/',
+        'teams': f'{base_url}/teams/',
+        'activities': f'{base_url}/activities/',
+        'workouts': f'{base_url}/workouts/',
+        'leaderboard': f'{base_url}/leaderboard/',
     })
 
 urlpatterns = [
